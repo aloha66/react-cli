@@ -1,0 +1,33 @@
+{
+  "include": ["src/**/*"],
+  "exclude": [ "node_modules", "public","dist"],
+  "compilerOptions": {
+    /* Basic Options */
+    // "incremental": true,                   /* Enable incremental compilation */
+    "target": "esnext",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
+    "module": "esnext",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+    // "lib": [],                             /* Specify library files to be included in the compilation. */
+    "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+    "strict": true,                           /* Enable all strict type-checking options. */ 
+    "baseUrl": ".",                       /* Base directory to resolve non-absolute module names. */
+    "paths": {
+      /* baseUrl和paths组合解决了无法使用webpack的alias问题 */
+      "@/*": ["./src/*"],
+      "@con/*": ["./src/containers/*"],
+      "@com/*": ["./src/components/*"],
+      "@api/*": ["./src/api/*"],
+      "@const/*": ["./src/const/*"],
+      "@img/*": ["./src/img/*"],
+      "@ass/*": ["./src/ass/*"],
+      "@scss/*": ["./src/scss/*"],
+    },                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    "types": ["react"],                           /* Type declaration files to be included in compilation. */
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules":true,
+    "noEmit": true,   /* 不通过tsc输出js代码 */
+    "noImplicitAny":false   /* 隐藏any类型检查 */
+  }
+}

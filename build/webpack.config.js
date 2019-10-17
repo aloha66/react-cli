@@ -4,6 +4,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { cssLoader, picLoader } = require('./utils');
 const resolve = dir => path.resolve(__dirname, '..', dir);
 
@@ -23,7 +24,8 @@ module.exports = {
   // mode:'development',
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'], // 模块搜索目录,优先搜索
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'], // 优先匹配的扩展名
+    // 别名
     alias: {
       '@': resolve('src'),
       '@con': resolve('src/containers'),
@@ -42,7 +44,7 @@ module.exports = {
       {
         // eslint预检
         enforce: 'pre',
-        test: /\.js|jsx$/,
+        test: /\.(j|t)s|(j|t)sx$/,
         exclude: /node_modules/,
         // loader: 'eslint-loader',
         use: [
@@ -65,7 +67,7 @@ module.exports = {
       ...cssLoader(),
       picLoader(),
       {
-        test: /\.js|jsx$/,
+        test: /\.(j|t)s|(j|t)sx$/,
         exclude: /node_modules/,
         use: [
           // 开启多进程
@@ -100,6 +102,7 @@ module.exports = {
       // webpack 生成模板的路径
       template: path.join(__dirname, '../public/index.html'),
       minify: {
+        // 压缩
         collapseWhitespace: true,
         removeComments: true,
         removeRedundantAttributes: true,
@@ -108,10 +111,15 @@ module.exports = {
         useShortDoctype: true,
       },
     }),
+    // 命令行进度条
     new ProgressBarPlugin(),
     new FriendlyErrorsWebpackPlugin(),
+    // ts检查，可与ts-loader一起用
+    new ForkTsCheckerWebpackPlugin({
+      async: false, // webpack-dev-server的overlay错误显示
+    }),
     new HardSourceWebpackPlugin(), // 缓存
-    // 只加载中文
+    // moment只加载中文
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),
   ],
 };
